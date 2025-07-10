@@ -34,14 +34,6 @@ public class ConexaoPostgresDB {
         }
     }
 
-    public static void main(String[] args) throws SQLException {
-        Connection testeConexao = ConexaoPostgresDB.conectar();
-        if (testeConexao != null) {
-            ConexaoPostgresDB.fecharConexao(testeConexao);
-        }
-        ConexaoPostgresDB.setAluno("Larissa", 29);
-    }
-
     public static void setAluno(String nome, int idade) throws SQLException {
         String sql = "INSERT INTO aluno (nome, idade) VALUES (?, ?)";
         Connection conexao = null;
@@ -71,14 +63,14 @@ public class ConexaoPostgresDB {
     }
 
     public static void getAlunos() {
-        String sql = "SELECT id_aluno, nome, idade, telefone FROM aluno ORDER BY id_aluno";
+        String sql = "SELECT id_aluno, nome, idade FROM aluno ORDER BY id_aluno";
         Connection conexao = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
         try {
             conexao = conectar();
-            if (conexao != null){
+            if (conexao != null) {
                 stmt = conexao.prepareStatement(sql);
                 rs = stmt.executeQuery();
                 System.out.println("\n--- Alunos Cadastrados no DB ---");
@@ -88,8 +80,7 @@ public class ConexaoPostgresDB {
                     int id = rs.getInt("id_aluno");
                     String nome = rs.getString("nome");
                     Number idade = rs.getInt("idade");
-                    String telefone = rs.getString("telefone");
-                    System.out.println("ID: " + id + ", Nome: " + nome + ", Idade: " + idade + ", Telefone: " + telefone);
+                    System.out.println("ID: " + id + ", Nome: " + nome + ", Idade: " + idade);
                 }
                 if (!encontrouAluno) {
                     System.out.println("Nenhum aluno encontrado.");
@@ -103,8 +94,81 @@ public class ConexaoPostgresDB {
                 if (rs != null) rs.close();
                 if (stmt != null) stmt.close();
                 if (conexao != null) fecharConexao(conexao);
-            } catch (SQLException e) {System.err.println("Erro ao fechar recursos após consulta: " + e.getMessage());}
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos após consulta: " + e.getMessage());
+            }
 
         }
     }
+
+    public static void atualizarAluno(int id_aluno, String novoNome, int novaIdade) {
+        String sql = "UPDATE aluno SET nome = ?, idade = ? WHERE id_aluno = ?";
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        try {
+            conexao = conectar();
+            if (conexao != null) {
+                stmt = conexao.prepareStatement(sql);
+                stmt.setString(1, novoNome);
+                stmt.setInt(2, novaIdade);
+                stmt.setInt(3, id_aluno); //O ID DO ALUNO QUE QUEREMOS ATUALIZAR
+                int linhasAfetadas = stmt.executeUpdate();
+                if (linhasAfetadas > 0) {
+                    System.out.println("Aluno com ID " + id_aluno + " atualizado com sucesso!");
+                } else {
+                    System.out.println("Nenhum aluno encontrado com ID " + id_aluno + " para atualização.");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar aluno no PostgreSQL: " + e.getMessage());
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conexao != null) fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos após atualização: " + e.getMessage());
+            }
+        }
+    }
+
+    public static void removerAluno(int id_aluno) {
+        String sql = "DELETE FROM aluno WHERE id_aluno = ?";
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        try {
+            conexao = conectar();
+            if (conexao != null) {
+                stmt = conexao.prepareStatement(sql);
+                stmt.setInt(1, id_aluno);
+
+                int linhasAfetadas = stmt.executeUpdate();
+                if (linhasAfetadas > 0) {
+                    System.out.println("Aluno com ID " + id_aluno + " removido com sucesso!");
+                } else {
+                    System.out.println("Nenhum aluno encontrado com ID " + id_aluno + " para remoção.");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao remover aluno no PostgreSQL: " + e.getMessage());
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conexao != null) fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos após remoção: " + e.getMessage());
+            }
+        }
+
+    }
+
+    public static void main(String[] args) throws SQLException {
+    Connection testeConexao = conectar();
+    if (testeConexao != null) {
+        ConexaoPostgresDB.fecharConexao(testeConexao);
+    }
+    ConexaoPostgresDB.setAluno("Larissa", 29);
+        ConexaoPostgresDB.getAlunos();
+        ConexaoPostgresDB.atualizarAluno(2,"Everton", 18);
+        ConexaoPostgresDB.removerAluno(4);
+}
 }
