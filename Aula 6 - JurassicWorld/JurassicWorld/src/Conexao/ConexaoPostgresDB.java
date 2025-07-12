@@ -12,7 +12,7 @@ public class ConexaoPostgresDB {
     private static final String USUARIO = "postgres";
     private static final String SENHA = "root";
 
-public static Connection conectar() {
+    public static Connection conectar() {
         Connection conexao = null;
         try {
             conexao = DriverManager.getConnection(URL, USUARIO, SENHA);
@@ -23,7 +23,7 @@ public static Connection conectar() {
         return conexao;
     }
 
-public static void fecharConexao(Connection conexao) {
+    public static void fecharConexao(Connection conexao) {
     if (conexao != null) {
         try {
             conexao.close();
@@ -35,11 +35,12 @@ public static void fecharConexao(Connection conexao) {
     }
 }
 
-public static void setDinossauros(
+
+    public static void setDinossauros(
             String nome,
             String especie,
             String dieta,
-            int idade_estimada,
+            String idade_estimada,
             int idade_dinossauro,
             String status_cercado)
             throws SQLException {
@@ -53,7 +54,7 @@ public static void setDinossauros(
                 stmt.setString(1, nome);
                 stmt.setString(2, especie);
                 stmt.setString(3, dieta);
-                stmt.setInt(4, idade_estimada);
+                stmt.setString(4, String.valueOf(idade_estimada));
                 stmt.setInt(5, idade_dinossauro);
                 stmt.setString(6, status_cercado);
 
@@ -75,17 +76,60 @@ public static void setDinossauros(
     }
 
 
+    public static void getDinossauros() {
+        String sql = "SELECT id_dinossauro, nome, especie, dieta, idade_estimada, idade_dinossauro, status_cercado ORDER BY id_dinossauro";
+        Connection conexao = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conexao = conectar();
+            if (conexao != null) {
+                stmt = conexao.prepareStatement(sql);
+                rs = stmt.executeQuery();
+                System.out.println("\n--- Dinossauros Cadastrados no DB ---");
+                boolean encontrouDinossauro = false;
+                while (rs.next()) {
+                    encontrouDinossauro = true;
+                    int id = rs.getInt("id_dinossauro");
+                    String nome = rs.getString("nome");
+                    String especie = rs.getString("especie");
+                    String dieta = rs.getString("dieta");
+                    int idade_estimada = rs.getInt("idade_estimada");
+                    int idade_dinossauro = rs.getInt("idade_dinossauro");
+                    String status_cercado = rs.getString("status_cercado");
+
+                    System.out.println("ID: " + id + ", Nome: " + nome + ", Espécie: " + especie + ", Dieta: " + dieta + ", Idade Estimada: " + idade_estimada + ", Idade Atual: " + idade_dinossauro + ", Status: " + status_cercado);
+                }
+                if (!encontrouDinossauro) {
+                    System.out.println("Nenhum dinossauro encontrado.");
+                }
+                System.out.println("---------------------------\n");
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao consultar dinossauros no DB: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conexao != null) fecharConexao(conexao);
+            } catch (SQLException e) {
+                System.err.println("Erro ao fechar recursos após consulta: " + e.getMessage());
+            }
+
+        }
+    }
+
+
 public static void main (String[]args) throws SQLException {
        Connection testeConexao = conectar();
        if (testeConexao != null) {
        ConexaoPostgresDB.fecharConexao(testeConexao);
        }
 
-    ConexaoPostgresDB.setDinossauros("Jorge", "Tiranossauro Rex", "Carnívoro", 30, 23, "Em fuga");
-    ConexaoPostgresDB.setDinossauros("Max", "Velociraptor", "Carnívoro", 15, 10, "Seguro");
-    ConexaoPostgresDB.setDinossauros("Zara", "Estegossauro", "Herbívoro", 20, 12, "Contido");
-    ConexaoPostgresDB.setDinossauros("Rex", "Espinossauro", "Carnívoro", 28, 22, "Seguro");
-    ConexaoPostgresDB.setDinossauros("Mila", "Anquilossauro", "Herbívoro", 18, 14, "Em laboratório");
+    ConexaoPostgresDB.setDinossauros("Brachiosaurus", "Brachiosaurus atithorax", "Herbívoro", "150M", 20, "Seguro");
+    ConexaoPostgresDB.setDinossauros("T-Rex", "Tyrannosaurus Rex", "Carnívoro", "66M", 15, "Seguro");
+    ConexaoPostgresDB.setDinossauros("Dilophosaurus", "Dilophosaurus wetherilli", "Carnívoro", "193M", 8, "Contido");
 }
 
 }
