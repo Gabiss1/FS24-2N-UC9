@@ -49,18 +49,15 @@ public class DinossauroController {
         dinossauroDAO.atualizar(dinossauro);
     }
 
-    /*
     public List<Dinossauro> listarTodosDinossauros() {
         return dinossauroDAO.listarTodos();
-    }*/
+    }
 
-    /*
     public void removerDinossauro(int id) {
         dinossauroDAO.remover(id);
-    }*/
+    }
 
-    /*
     public List<Dinossauro> buscarDinossauroPorNome(String nome) {
         return dinossauroDAO.buscarPorNome(nome);
-    }*/
+    }
 }

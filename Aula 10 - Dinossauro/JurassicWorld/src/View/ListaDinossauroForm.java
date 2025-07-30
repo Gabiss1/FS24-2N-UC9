@@ -23,7 +23,7 @@ public class ListaDinossauroForm extends JInternalFrame {
         setSize(850, 500);
         setLayout(new BorderLayout());
 
-        String[] colunas = {"ID", "Nome", "Espécie", "Peso (kg)", "Altura (m)", "Data Descoberta"};
+        String[] colunas = {"ID", "Nome", "Espécie", "Dieta", "Idade Estimada", "Idade", "Status"};
         tableModel = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -47,13 +47,13 @@ public class ListaDinossauroForm extends JInternalFrame {
         panelAcoes.add(btnRemover);
         add(panelAcoes, BorderLayout.NORTH);
 
-        //btnAtualizar.addActionListener(e -> carregarDinossaurosNaTabela());
-        //btnRemover.addActionListener(e -> removerDinossauroSelecionado());
-        //btnBuscar.addActionListener(e -> buscarDinossaurosPorNome());
+        btnAtualizar.addActionListener(e -> carregarDinossaurosNaTabela());
+        btnRemover.addActionListener(e -> removerDinossauroSelecionado());
+        btnBuscar.addActionListener(e -> buscarDinossaurosPorNome());
 
     }
 
-    /*
+
     private void carregarDinossaurosNaTabela() {
         tableModel.setRowCount(0); // Limpa as linhas existentes na tabela
         List<Dinossauro> dinossauros = controller.listarTodosDinossauros(); // Busca todos os dinossauros
@@ -69,9 +69,9 @@ public class ListaDinossauroForm extends JInternalFrame {
                     dino.getStatus_cercado()
             });
         }
-    }*/
+    }
 
-    /*
+
     private void removerDinossauroSelecionado() {
         int selectedRow = tabelaDinossauros.getSelectedRow(); // Obtém a linha selecionada
         if (selectedRow >= 0) { // Verifica se alguma linha foi selecionada
@@ -93,9 +93,9 @@ public class ListaDinossauroForm extends JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um dinossauro para remover.", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
-    }*/
+    }
 
-    /*
+
     private void buscarDinossaurosPorNome() {
         String nomeBusca = txtBuscaNome.getText().trim(); // Obtém o texto do campo de busca
         tableModel.setRowCount(0); // Limpa a tabela
@@ -124,5 +124,5 @@ public class ListaDinossauroForm extends JInternalFrame {
                     dino.getStatus_cercado()
             });
         }
-    }*/
+    }
 }

@@ -33,13 +33,13 @@ public class Main extends JFrame {
         // --- Menu Dinossauros (usará dinossauroController) ---
         JMenu menuDinossauros = new JMenu("Dinossauros");
         JMenuItem itemCadastrarDinossauro = new JMenuItem("Cadastrar Dinossauro");
-        //JMenuItem itemListarDinossauros = new JMenuItem("Listar Dinossauros");
+        JMenuItem itemListarDinossauros = new JMenuItem("Listar Dinossauros");
 
         itemCadastrarDinossauro.addActionListener(e -> openDinossauroForm(null));
-        //itemListarDinossauros.addActionListener(e -> openListaDinossaurosPanel());
+        itemListarDinossauros.addActionListener(e -> openListaDinossaurosForm());
 
         menuDinossauros.add(itemCadastrarDinossauro);
-        //menuDinossauros.add(itemListarDinossauros);
+        menuDinossauros.add(itemListarDinossauros);
 
         menuBar.add(menuDinossauros);
 
@@ -61,13 +61,12 @@ public class Main extends JFrame {
         dinossauroForm.toFront();
     }
 
-    /*
-    private void openListaDinossaurosPanel() {
+    private void openListaDinossaurosForm() {
         ListaDinossauroForm listaDinossauros = new ListaDinossauroForm(dinossauroController); // Passa o dinossauroController
         desktopPane.add(listaDinossauros);
         listaDinossauros.setVisible(true);
         listaDinossauros.toFront();
-    }*/
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
