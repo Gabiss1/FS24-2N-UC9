@@ -1,0 +1,68 @@
+<hibernate-configuration xmlns="http://www.hibernate.org/xsd/orm/cfg">
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/Biblioteca</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">root</property>
+
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <mapping class="Model.Aluno"/>
+    </session-factory>
+</hibernate-configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--// src/util/HibernateUtil.java-->
+<!--        package util;-->
+
+<!--        import model.Pokemon;-->
+<!--        import org.hibernate.SessionFactory;-->
+<!--        import org.hibernate.boot.MetadataSources;-->
+<!--        import org.hibernate.boot.registry.StandardServiceRegistry;-->
+<!--        import org.hibernate.boot.registry.StandardServiceRegistryBuilder;-->
+
+<!--        public class HibernateUtil {-->
+<!--        private static SessionFactory sessionFactory;-->
+
+<!--        static {-->
+<!--        try {-->
+<!--        // Cria um serviço de registro a partir do hibernate.cfg.xml-->
+<!--        StandardServiceRegistry standardRegistry = new StandardServiceRegistryBuilder()-->
+<!--        .configure("hibernate.cfg.xml")-->
+<!--        .build();-->
+<!--        // Cria a SessionFactory a partir do serviço de registro-->
+<!--        sessionFactory = new MetadataSources(standardRegistry)-->
+<!--        .addAnnotatedClass(Pokemon.class)-->
+<!--        .buildMetadata()-->
+<!--        .buildSessionFactory();-->
+<!--        } catch (Exception e) {-->
+<!--        e.printStackTrace();-->
+<!--        throw new ExceptionInInitializerError(e);-->
+<!--        }-->
+<!--        }-->
+
+<!--        public static SessionFactory getSessionFactory() {-->
+<!--        return sessionFactory;-->
+<!--        }-->
+<!--        }-->
