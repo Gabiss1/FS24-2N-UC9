@@ -4,6 +4,7 @@ import Util.HibernateUtil;
 import Model.Pokemon;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,16 +51,15 @@ public class PokemonController {
 //                throw new Exception("Já existe um Pokémon com esse nome!");
 //            }
 
-            Pokemon pokemon = new Pokemon();
-            pokemon.setNome(nome);
-            pokemon.setTipoPrimario(tipoPrimario);
-            pokemon.setTipoSecundario(tipoSecundario);
-            pokemon.setNivel(nivel);
-            pokemon.setHpMaximo(hpMaximo);
-
-            session.persist(pokemon); // Salva o objeto no banco
+            Pokemon pokemon = new Pokemon(nome, tipoPrimario, tipoSecundario, nivel, hpMaximo);
+            // Salva o objeto no banco
             transaction.commit();
 
+        } catch (Exception e){
+            if(transaction != null){
+                transaction.rollback();
+            }
+            throw new RuntimeException("Erro ao cadastrar: " + e.getMessage());
         }
     }
 
@@ -78,7 +78,61 @@ public class PokemonController {
         return true;
     }
 
-    public void listar(){
+    public List<Pokemon> listarTodosPokemons(){
+            try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Pokemon> query = session.createQuery("FROM Pokemon", Pokemon.class);
+            return query.getResultList();
+            }
+        }
 
+    public long contarPokemonsPorTipo(String tipo){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Long> query = session.createQuery("SELECT COUNT (*) FROM Pokemon WHERE tipo1 = :tipo", Long.class);
+            query.setParameter("tipo", tipo);
+            return query.getSingleResult();
+        }
     }
+
+    public Pokemon buscarPorId(int id){
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            return session.get(Pokemon.class, id);
+        }
+    }
+
+    public void atualizarPokemon(Pokemon pokemon){
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.merge(pokemon);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Erro ao atualizar Pokémon.", e);
+        }
+    }
+
+    public void removerPokemon(int id){
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            Pokemon pokemon = session.get(Pokemon.class, id);
+            if(pokemon != null){
+                session.remove(pokemon);
+            }
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Erro ao remover Pokémon.", e);
+        }
+    }
+
+//    public void buscarPokemonPorNome(String nome){
+//        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+//
+//        }
+//    }
 }
