@@ -1,4 +1,4 @@
-package View;
+package View.Treinador;
 
 import Controller.TreinadorController;
 import Model.Treinador;
@@ -76,8 +76,8 @@ public class TreinadorForm extends JInternalFrame {
         }
     }
 
-    private void buscarTreinador() {
-        String idStr = JOptionPane.showInputDialog(this, "Digite o ID do Treinador para buscar:");
+    private void buscarTreinadorPorNome() {
+        String idStr = JOptionPane.showInputDialog(this, "Digite o ID do TReinador para buscar:");
         if (idStr != null && !idStr.trim().isEmpty()) {
             try {
                 int id = Integer.parseInt(idStr);
@@ -133,11 +133,3 @@ public class TreinadorForm extends JInternalFrame {
         btnBuscar.setEnabled(true);
     }
 }
-package View.Treinador;
-
-import Controller.TreinadorController;
-import Model.Treinador;
-
-import javax.swing.*;
-        import java.awt.*;
-

@@ -11,7 +11,6 @@ import util.HibernateUtil;
 import java.util.List;
 
 public class TreinadorController {
-
     public void cadastrarTreinador(Treinador treinador) throws Exception {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -22,7 +21,7 @@ public class TreinadorController {
             if (treinador.getNome() == null || treinador.getNome().trim().isEmpty()) {
                 throw new Exception("Nome do Treinador é obrigatório.");
             }
-            if (treinador.getcidade() == null || treinador.getcidade().trim().isEmpty()) {
+            if (treinador.getCidade() == null || treinador.getCidade().trim().isEmpty()) {
                 throw new Exception("Nome da Cidade é obrigatório");
             }
 
@@ -34,14 +33,6 @@ public class TreinadorController {
                 transaction.rollback();
             }
             throw new RuntimeException("Erro ao cadastrar treinador", e);
-        }
-    }
-
-    public List<Treinador> listarTodosTreinador() {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            // HQL (hibernate query languege - similar ao sql, mas usa o nome da classe
-            Query<Treinador> query = session.createQuery("FROM Treinador", Treinador.class);
-            return query.getResultList();
         }
     }
 
@@ -57,6 +48,15 @@ public class TreinadorController {
                 transaction.rollback();
             }
             throw new RuntimeException("Erro ao atualizar treinador", e);
+        }
+    }
+
+    public List<Treinador> listarTodosTreinadores() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            //HQL (Hibernate Query Language) - similar ao SQL, mas usa o nome da CLASSE
+            Query<Treinador> query = session.createQuery("FROM treinador", Treinador.class);
+            return query.getResultList();
+
         }
     }
 
@@ -94,11 +94,10 @@ public class TreinadorController {
         }
     }
 
-    public Treinador buscarTreinadorPorNome(String nome) {
+    public Pokemon buscarPokemonPorTreinador(String nome) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Treinador> query = session.createQuery("FROM Treinador WHERE nome = :nome", Treinador.class);
-            query.setParameter("nome", nome);
-            return query.getSingleResult();
+            return session.get(Pokemon.class, nome);
         }
     }
+
 }

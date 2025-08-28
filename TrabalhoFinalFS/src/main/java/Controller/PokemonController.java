@@ -7,7 +7,6 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class PokemonController {
@@ -17,7 +16,6 @@ public class PokemonController {
             transaction = session.beginTransaction();
             //Validações de négocio(nome,tipo,etc.)
             if (pokemon.getNome() == null || pokemon.getNome().trim().isEmpty()) {
-                throw new Exception("Errou");
             }
 
             if (pokemon.getNome() == null || pokemon.getNome().trim().isEmpty()) {
@@ -105,22 +103,15 @@ public class PokemonController {
         }
     }
 
-    public List<Pokemon> buscarPokemonPorNome(String nome) {
+    public Pokemon buscarPokemonPorNome(String nome) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Pokemon> pokemon = session.createQuery("FROM Pokemon WHERE nome = :nome", Pokemon.class);
-            pokemon.setParameter("nome",nome);
-            return pokemon.getResultList();
+            return session.get(Pokemon.class, nome);
         }
     }
 
-    public List<Pokemon> buscarTreinadorPorNome(int FK_Treinador) {
+    public Treinador buscarPokemonsPorTreinador(String nomeTreinadorBusca) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Pokemon> query = session.createQuery("FROM Pokemon WHERE FK_Treinador = :FK_Treinador", Pokemon.class);
-            query.setParameter("FK_Treinador", FK_Treinador);
-            List<Pokemon> pokes = query.getResultList();
-            System.out.println(pokes.getFirst().getNome());
-            return query.getResultList();
+            return session.get(Treinador.class, nomeTreinadorBusca);
         }
     }
 }
-

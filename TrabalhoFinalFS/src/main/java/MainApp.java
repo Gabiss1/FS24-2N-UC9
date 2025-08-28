@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 public class MainApp extends JFrame {
 
     private JDesktopPane desktopPane;
@@ -43,7 +44,7 @@ public class MainApp extends JFrame {
         // Menu Pokémons
         JMenu menuPokemons = new JMenu("Pokémons");
         JMenu menuTreinador = new JMenu("Treinador");
-//        JMenu menuJson = new JMenu("JSON");
+        JMenu menuJson = new JMenu("json");
         JMenuItem itemCadastrarPokemon = new JMenuItem("Cadastrar Pokémon");
         JMenuItem itemCadastrarTreinador = new JMenuItem("Cadastrar Treinador");
         JMenuItem itemListarPokemons = new JMenuItem("Listar Pokémons");
@@ -76,18 +77,7 @@ public class MainApp extends JFrame {
         menuBar.add(menuSair);
 
         setJMenuBar(menuBar);
-
-
     }
-
-//    private void openJsonForm() {
-//        List<Pokemon> pokemonsParaInserir =
-//                System.out.println("Lidos " + pokemonsParaInserir.size() + pokemonController.inserirLista(pokemonsParaInserir);
-//            System.out.println("Carga de Pokémons concluída com sucesso!");
-//        } catch IOException e; {
-//           System.err.println("Erro ao carregar o arquivo JSON: " + e.getMessage());
-//            e.printStackTrace();
-//    }
 
     private void openPokemonForm(Integer idPokemon) {
         PokemonForm pokemonForm = new PokemonForm(pokemonController, idPokemon);
@@ -98,8 +88,23 @@ public class MainApp extends JFrame {
 
     }
 
-    private void openTreinadorForm(Integer Treinadorid) {
-        TreinadorForm treinadorForm = new TreinadorForm(treinadorController, Treinadorid);
+//    private void openJsonForm() {
+//        try {
+//
+//// Lê os 150 Pokémons do arquivo JSON
+//            List<Pokemon> pokemonsParaInserir = JsonReader.
+//            System.out.println("Lidos " + pokemonsParaInserir.size() + " Pokémons do arquivo JSON.");
+    //// Exemplo de uso com um método de carga massiva
+    //// pokemonController.inserirLista(pokemonsParaInserir);
+//            System.out.println("Carga de Pokémons concluída com sucesso!");
+//        } catch (IOException e) {
+//            System.err.println("Erro ao carregar o arquivo JSON: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
+
+    private void openTreinadorForm(Integer idTreinador) {
+        TreinadorForm treinadorForm = new TreinadorForm(treinadorController, idTreinador);
         desktopPane.add(treinadorForm);
         treinadorForm.setVisible(true);
         treinadorForm.toFront();

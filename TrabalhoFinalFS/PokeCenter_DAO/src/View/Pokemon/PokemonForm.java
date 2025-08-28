@@ -1,14 +1,15 @@
-package View;
+package View.Pokemon;
 
 import Controller.PokemonController;
 import Model.Pokemon;
 
 import javax.swing.*;
-import java.awt.*;
+        import java.awt.*;
 
 public class PokemonForm extends JInternalFrame {
+
     private PokemonController controller;
-    private JTextField txtId, txtNome, txtTipoPrimario, txtTipoSecundario, txtNivel, txtHpMaximo;
+    private JTextField txtId, txtNome, txtTipoPrimario, txtTipoSecundario, txtNivel, txtHpMaximo,txtFK_Treinador;
     private JButton btnSalvar, btnBuscar;
     private Integer pokemonIdParaEdicao;
 
@@ -33,6 +34,9 @@ public class PokemonForm extends JInternalFrame {
         txtId.setEditable(false);
         add(txtId, gbc);
         gbc.gridx = 2; gbc.gridy = row;
+        btnBuscar = new JButton("Buscar");
+        btnBuscar.addActionListener(e -> buscarPokemon());
+        add(btnBuscar, gbc);
         row++;
 
         // Nome
@@ -75,11 +79,24 @@ public class PokemonForm extends JInternalFrame {
         add(txtHpMaximo, gbc);
         row++;
 
+        // FK_Treinador
+        gbc.gridx = 0; gbc.gridy = row;
+        add(new JLabel("FK_Treinador:"), gbc);
+        gbc.gridx = 1; gbc.gridy = row;
+        txtId = new JTextField(10);
+        txtId.setEditable(false);
+        add(txtId, gbc);
+        gbc.gridx = 2; gbc.gridy = row;
+        txtFK_Treinador = new JTextField("FK_Treinador");
+        add(txtFK_Treinador, gbc);
+        row++;
+
         // Botão Salvar
         gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 3;
         btnSalvar = new JButton("Salvar");
         btnSalvar.addActionListener(e -> salvarPokemon());
         add(btnSalvar, gbc);
+
 
         if (pokemonIdParaEdicao != null) {
             carregarPokemonParaEdicao(pokemonIdParaEdicao);
@@ -110,6 +127,7 @@ public class PokemonForm extends JInternalFrame {
                 txtTipoSecundario.setText(pokemon.getTipoSecundario());
                 txtNivel.setText(String.valueOf(pokemon.getNivel()));
                 txtHpMaximo.setText(String.valueOf(pokemon.getHpMaximo()));
+                txtFK_Treinador.setText(String.valueOf(pokemon.getNome()));
                 pokemonIdParaEdicao = pokemon.getId();
             } else {
                 JOptionPane.showMessageDialog(this, "Pokémon com ID " + id + " não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -127,6 +145,7 @@ public class PokemonForm extends JInternalFrame {
             String tipoSecundario = txtTipoSecundario.getText().trim();
             int nivel = Integer.parseInt(txtNivel.getText().trim());
             int hpMaximo = Integer.parseInt(txtHpMaximo.getText().trim());
+            int FK_Treinador = Integer.parseInt(txtFK_Treinador.getText().trim());
 
             // Garante que tipoSecundario seja null se estiver vazio
             if (tipoSecundario.isEmpty()) {
@@ -134,8 +153,11 @@ public class PokemonForm extends JInternalFrame {
             }
 
             if (pokemonIdParaEdicao == null) {
-                controller.cadastrarPokemon(new Pokemon(nome, tipoPrimario, tipoSecundario, nivel, hpMaximo));
+                controller.cadastrarPokemon(nome, tipoPrimario, tipoSecundario, nivel, hpMaximo,FK_Treinador);
                 JOptionPane.showMessageDialog(this, "Pokémon cadastrado com sucesso!");
+            } else {
+                controller.atualizarPokemon(pokemonIdParaEdicao, nome, tipoPrimario, tipoSecundario, nivel, hpMaximo);
+                JOptionPane.showMessageDialog(this, "Pokémon atualizado com sucesso!");
             }
             this.dispose();
         } catch (NumberFormatException e) {
@@ -154,6 +176,7 @@ public class PokemonForm extends JInternalFrame {
         txtTipoSecundario.setText("");
         txtNivel.setText("");
         txtHpMaximo.setText("");
+        txtFK_Treinador.setText("");
         pokemonIdParaEdicao = null;
         btnBuscar.setEnabled(true);
     }

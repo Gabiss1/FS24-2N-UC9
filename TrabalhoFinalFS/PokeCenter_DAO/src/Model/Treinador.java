@@ -1,24 +1,17 @@
 package Model;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "treinador")
 public class Treinador {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_treinador", nullable = false)
     private int id_treinador;
-
-    @Column(name = "nome", nullable = false)
     private String nome;
-
-    @Column(name="cidade",nullable = false)
     private String cidade;
-
 
     public Treinador(int id_treinador, String nome, String cidade) {
         this.id_treinador = id_treinador;
+        this.nome = nome;
+        this.cidade = cidade;
+    }
+
+    public Treinador(String nome, String cidade) {
         this.nome = nome;
         this.cidade = cidade;
     }
@@ -46,8 +39,4 @@ public class Treinador {
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
-
-//    public List<Pokemon> buscarPokemonsPorTreinador(String nomeTreinador) {
-//        return pokemonDAO.buscarPorTreinador(nomeTreinador);
-//    }
 }
