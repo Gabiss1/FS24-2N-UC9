@@ -275,6 +275,8 @@ public class MainFrame extends JFrame {
         listaPokemon.add(new Pokemon("Dragonite", "Dragão", "Voador", 49, 160, 147)); // fk_treinador = 4
         listaPokemon.add(new Pokemon("Mewtwo", "Psíquico", null, 50, 200, 148)); // fk_treinador = 5
         listaPokemon.add(new Pokemon("Mew", "Psíquico", null, 51, 200, 149)); // fk_treinador = 1
+        listaPokemon.add(new Pokemon("Mega Sceptile", "Grama", "Dragão", 75, 345, 1));
+        listaPokemon.add(new Pokemon("Mega Sableye", "Nortuno", "Fantasma", 48, 132, 1));
         pokemonController.inserirListaPokemons(listaPokemon);
     }
 
